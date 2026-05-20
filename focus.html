@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails - Projet Cinéma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="nav container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-film"></i>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#trending">Films</a></li>
+                <li><a href="index.html#tv-shows">Séries</a></li>
+                <li><a href="index.html#trending">Populaires</a></li>
+            </ul>
+            <div class="menu-mobile">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="focus-hero" id="focus-hero">
+            <div class="focus-container container">
+                <img src="" alt="Affiche" id="focus-poster">
+                <div class="focus-info">
+                    <div class="focus-title-wrapper">
+                        <div class="rating-badge large" id="focus-rating"></div>
+                        <div class="title-block">
+                            <h1 id="focus-title"></h1>
+                            <p class="focus-meta" id="focus-meta"></p>
+                        </div>
+                    </div>
+                    <div class="synopsis-block">
+                        <h3>Synopsis</h3>
+                        <p id="focus-synopsis"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="casting container">
+            <h2>Casting</h2>
+            <div class="cast-grid" id="cast-grid"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Junia CIR2 - Projet Cinéma</p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/focus.js"></script>
+</body>
+</html>
