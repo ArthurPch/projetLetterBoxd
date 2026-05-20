@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,19 +10,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
     <header>
-        <nav class="nav">
+        <nav class="nav container">
             <div class="logo">
                 <a href="index.html">
                     <i class="fas fa-film"></i>
                 </a>
             </div>
             <ul class="nav-links">
-                <li><a href="#" class="active">Films</a></li>
-                <li><a href="#">Séries</a></li>
-                <li><a href="#">Populaires</a></li>
+                <li><a href="#trending" class="active">Films</a></li>
+                <li><a href="#tv-shows">Séries</a></li>
+                <li><a href="#trending">Populaires</a></li>
             </ul>
             <div class="menu-mobile">
                 <i class="fas fa-bars"></i>
@@ -40,18 +38,18 @@
             </div>
         </section>
 
-        <section class="trending container">
+        <section id="trending" class="trending container">
             <div class="section-header">
                 <h2>Tendances</h2>
                 <div class="filters">
-                    <button class="btn-filter active" data-filter="top_rated">Aujourd'hui</button>
+                    <button class="btn-filter active" data-filter="day">Aujourd'hui</button>
                     <button class="btn-filter" data-filter="week">Cette semaine</button>
                 </div>
             </div>
             <div id="trending-grid" class="movie-grid"></div>
         </section>
 
-        <section class="tv-shows container">
+        <section id="tv-shows" class="tv-shows container">
             <div class="section-header">
                 <h2>Séries TV</h2>
                 <div class="filters">

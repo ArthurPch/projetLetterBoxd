@@ -4,12 +4,18 @@ class App {
         this.trendingGrid = document.getElementById('trending-grid');
         this.tvGrid = document.getElementById('tv-grid');
         this.filterButtons = document.querySelectorAll('.btn-filter');
-        this.initEventListeners();
+        this.searchInput = document.getElementById('search-input');
+        this.searchBtn = document.getElementById('search-button');
+        
+        if (this.trendingGrid && this.tvGrid) {
+            this.initEventListeners();
+        }
     }
 
     async init() {
-        this.displayTrending('movie', 'day');
-        this.displayTV('top_rated');
+        if (!this.trendingGrid || !this.tvGrid) return;
+        await this.displayTrending('movie', 'day');
+        await this.displayTV('top_rated');
     }
 
     initEventListeners() {
@@ -21,24 +27,53 @@ class App {
                 section.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
 
-                if (section.classList.contains('trending')) {
+                if (section.id === 'trending') {
                     this.displayTrending('movie', filter);
-                } else if (section.classList.contains('tv-shows')) {
+                } else if (section.id === 'tv-shows') {
                     this.displayTV(filter);
                 }
             });
         });
+
+        if (this.searchInput) {
+            this.searchInput.addEventListener('input', () => this.handleSearch());
+        }
+        if (this.searchBtn) {
+            this.searchBtn.addEventListener('click', () => this.handleSearch());
+        }
+    }
+
+    async handleSearch() {
+        const query = this.searchInput.value.trim();
+        const tvSection = document.getElementById('tv-shows');
+        const trendingTitle = document.querySelector('#trending h2');
+
+        if (query.length > 0) {
+            const data = await this.api.search(query);
+            if (data && data.results) {
+                this.renderGrid(data.results.filter(item => item.media_type !== 'person'), this.trendingGrid);
+                if (tvSection) tvSection.style.display = 'none';
+                if (trendingTitle) trendingTitle.textContent = 'Résultats de recherche';
+            }
+        } else {
+            await this.displayTrending('movie', 'day');
+            if (tvSection) tvSection.style.display = 'block';
+            if (trendingTitle) trendingTitle.textContent = 'Tendances';
+        }
     }
 
     async displayTrending(type, timeWindow) {
         const data = await this.api.getTrending(type, timeWindow);
-        this.renderGrid(data.results, this.trendingGrid);
+        if (data && data.results) {
+            this.renderGrid(data.results, this.trendingGrid);
+        }
     }
 
     async displayTV(filter) {
-        const response = await fetch(`${this.api.baseUrl}/tv/${filter}?language=fr-FR`, this.api.options);
-        const data = await response.json();
-        this.renderGrid(data.results, this.tvGrid);
+        const data = await this.api.getTVShows(filter);
+        if (data && data.results) {
+            this.renderGrid(data.results, this.tvGrid);
+        }
     }
 
     renderGrid(items, container) {
@@ -54,13 +89,12 @@ class App {
     createCard(item) {
         const title = item.title || item.name;
         const date = item.release_date || item.first_air_date;
-        const poster = this.getPosterUrl(item);
-        const itemType = this.getItemType(item);
-        
+        const poster = item.poster_path ? `${this.api.imgBaseUrl}${item.poster_path}` : 'https://via.placeholder.com/500x750?text=Pas+d+image';
+        const itemType = item.media_type || (item.first_air_date ? 'tv' : 'movie');
         const rating = Math.round(item.vote_average * 10); 
 
         const article = document.createElement('article');
-        article.classList.add('movie-card');
+        article.className = 'movie-card';
         article.innerHTML = `
             <a href="focus.html?id=${item.id}&type=${itemType}">
                 <div class="poster-container">
@@ -74,20 +108,6 @@ class App {
             </a>
         `;
         return article;
-    }
-
-    getPosterUrl(item) {
-        if (item.poster_path) {
-            return `${this.api.imgBaseUrl}${item.poster_path}`;
-        }
-        return 'assets/placeholder-poster.png';
-    }
-
-    getItemType(item) {
-        if (item.title) {
-            return 'movie';
-        }
-        return 'tv';
     }
 
     formatDate(dateStr) {
